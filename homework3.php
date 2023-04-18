@@ -1,131 +1,123 @@
-<?php
-$thisyear = date('Y'); 
-$thismonth = date('n'); 
-$today = date('j'); 
-
-//------ $year, $month 
-$year = isset($_GET['year']) ? $_GET['year'] : $thisyear;
-$month = isset($_GET['month']) ? $_GET['month'] : $thismonth;
-$day = isset($_GET['day']) ? $_GET['day'] : $today;
-
-$prev_month = $month - 1;
-$next_month = $month + 1;
-$prev_year = $next_year = $year;
-if ($month == 1) {
-    $prev_month = 12;
-    $prev_year = $year - 1;
-} else if ($month == 12) {
-    $next_month = 1;
-    $next_year = $year + 1;
-}
-$preyear = $year - 1;
-$nextyear = $year + 1;
-
-$predate = date("Y-m-d", mktime(0, 0, 0, $month - 1, 1, $year));
-$nextdate = date("Y-m-d", mktime(0, 0, 0, $month + 1, 1, $year));
-
-
-$max_day = date('t', mktime(0, 0, 0, $month, 1, $year)); 
-
-
-$start_week = date("w", mktime(0, 0, 0, $month, 1, $year)); 
-
-
-$total_week = ceil(($max_day + $start_week) / 7);
-
-
-$last_week = date('w', mktime(0, 0, 0, $month, $max_day, $year));
-?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <style>
-    font.holy {font-family: tahoma;font-size: 20px;color: #FF6C21;}
-    font.blue {font-family: tahoma;font-size: 20px;color: #0000FF;}
-    font.black {font-family: tahoma;font-size: 20px;color: #000000;}
-  </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <title>도형 면적과 체적 계산기</title>
 </head>
 <body>
-<div class="container">
-<table class="table table-bordered table-responsive">
-  <tr align="center" >
-    <td>
-        <a href=<?php echo 'index.php?year='.$preyear.'&month='.$month . '&day=1'; ?>>◀◀</a>
-    </td>
-    <td>
-        <a href=<?php echo 'index.php?year='.$prev_year.'&month='.$prev_month . '&day=1'; ?>>◀</a>
-    </td>
-    <td height="50" bgcolor="#FFFFFF" colspan="3">
-        <a href=<?php echo 'index.php?year=' . $thisyear . '&month=' . $thismonth . '&day=1'; ?>>
-        <?php echo "&nbsp;&nbsp;" . $year . '년 ' . $month . '월 ' . "&nbsp;&nbsp;"; ?></a>
-    </td>
-    <td>
-        <a href=<?php echo 'index.php?year='.$next_year.'&month='.$next_month.'&day=1'; ?>>▶</a>
-    </td>
-    <td>
-        <a href=<?php echo 'index.php?year='.$nextyear.'&month='.$month.'&day=1'; ?>>▶▶</a>
-    </td>
-  </tr>
-  <tr class="info">
-    <th hight="30">일</td>
-    <th>월</th>
-    <th>화</th>
-    <th>수</th>
-    <th>목</th>
-    <th>금</th>
-    <th>토</th>
-  </tr>
-
-  <?php
-
-    $day=1;
-
-
-    for($i=1; $i <= $total_week; $i++){?>
-  <tr>
+    <h1>도형 면적과 체적 계산기</h1>
+    <h2>삼각형 면적</h2>
+    <form method="post" action="">
+        <label for="tri-base">밑변:</label>
+        <input type="number" name="tri-base" id="tri-base" required>
+        <br>
+        <label for="tri-height">높이:</label>
+        <input type="number" name="tri-height" id="tri-height" required>
+        <br>
+        <input type="submit" value="계산">
+    </form>
     <?php
-
-    for ($j = 0; $j < 7; $j++) {
-
-        echo '<td height="50" valign="top">';
-        if (!(($i == 1 && $j < $start_week) || ($i == $total_week && $j > $last_week))) {
-
-            if ($j == 0) {
-
-                $style = "holy";
-            } else if ($j == 6) { 
-                $style = "blue";
-            } else {
-                $style = "black";
-            }
-
-            if ($year == $thisyear && $month == $thismonth && $day == date("j")) {
-
-                echo '<font class='.$style.'>';
-                echo $day;
-                echo '</font>';
-            } else {
-                echo '<font class='.$style.'>';
-                echo $day;
-                echo '</font>';
-            }
-          
-            $day++;
+        if(isset($_POST['tri-base']) && isset($_POST['tri-height'])) {
+            $base = $_POST['tri-base'];
+            $height = $_POST['tri-height'];
+            $area = $base * $height / 2;
+            echo "<p>삼각형의 면적은 $area 입니다.</p>";
         }
-        echo '</td>';
-    }
- ?>
-  </tr>
-  <?php } ?>
-</table>
-</div>
+    ?>
 
+
+    <h2>직사각형 면적</h2>
+    <form method="post" action="">
+        <label for="rect-width">가로:</label>
+        <input type="number" name="rect-width" id="rect-width" required>
+        <br>
+        <label for="rect-height">세로:</label>
+        <input type="number" name="rect-height" id="rect-height" required>
+        <br>
+        <input type="submit" value="계산">
+    </form>
+    <?php
+        if(isset($_POST['rect-width']) && isset($_POST['rect-height'])) {
+            $width = $_POST['rect-width'];
+            $height = $_POST['rect-height'];
+            $area = $width * $height;
+            echo "<p>직사각형의 면적은 $area 입니다.</p>";
+        }
+    ?>
+
+
+    <h2>원 면적</h2>
+    <form method="post" action="">
+        <label for="cir-radius">반지름:</label>
+        <input type="number" name="cir-radius" id="cir-radius" required>
+        <br>
+        <input type="submit" value="계산">
+    </form>
+    <?php
+        if(isset($_POST['cir-radius'])) {
+            $radius = $_POST['cir-radius'];
+            $area = pi() * pow($radius, 2);
+            echo "<p>원의 면적은 $area 입니다.</p>";
+        }
+    ?>
+
+
+    <h2>직육면체 체적</h2>
+    <form method="post" action="">
+        <label for="rectp-width">가로:</label>
+        <input type="number" name="rectp-width" id="rectp-width" required>
+        <br>
+        <label for="rectp-length">세로:</label>
+        <input type="number" name="rectp-length" id="rectp-length" required>
+        <br>
+        <label for="rectp-height">높이:</label>
+        <input type="number" name="rectp-height" id="rectp-height" required>
+        <br>
+        <input type="submit" value="계산">
+    </form>
+    <?php
+    if(isset($_POST['rectp-width']) && isset($_POST['rectp-length']) && isset($_POST['rectp-height'])) {
+        $width = $_POST['rectp-width'];
+        $length = $_POST['rectp-length'];
+        $height = $_POST['rectp-height'];
+        $volume = $width * $length * $height;
+        echo "<p>직육면체의 체적은 $volume 입니다.</p>";
+    }
+?>
+
+
+<h2>원통 체적</h2>
+<form method="post" action="">
+    <label for="cyl-radius">반지름:</label>
+    <input type="number" name="cyl-radius" id="cyl-radius" required>
+    <br>
+    <label for="cyl-height">높이:</label>
+    <input type="number" name="cyl-height" id="cyl-height" required>
+    <br>
+    <input type="submit" value="계산">
+</form>
+<?php
+    if(isset($_POST['cyl-radius']) && isset($_POST['cyl-height'])) {
+        $radius = $_POST['cyl-radius'];
+        $height = $_POST['cyl-height'];
+        $volume = pi() * pow($radius, 2) * $height;
+        echo "<p>원통의 체적은 $volume 입니다.</p>";
+    }
+?>
+
+
+<h2>구 체적</h2>
+<form method="post" action="">
+    <label for="sph-radius">반지름:</label>
+    <input type="number" name="sph-radius" id="sph-radius" required>
+    <br>
+    <input type="submit" value="계산">
+</form>
+<?php
+    if(isset($_POST['sph-radius'])) {
+        $radius = $_POST['sph-radius'];
+        $volume = 4/3 * pi() * pow($radius, 3);
+        echo "<p>구의 체적은 $volume 입니다.</p>";
+    }
+?>
 </body>
 </html>
